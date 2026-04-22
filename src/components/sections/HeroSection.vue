@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { ArrowDown, Sparkles } from 'lucide-vue-next'
+  import { ArrowDown, Sparkles, Download } from 'lucide-vue-next'
   import BaseButton from '@/components/ui/BaseButton.vue'
+
+  const cvPath = import.meta.env.BASE_URL + 'cv.pdf'
 
   function scrollTo(id: string) {
     const el = document.getElementById(id)
@@ -75,6 +77,15 @@
         <BaseButton variant="outline" size="lg" @click="scrollTo('contact')">
           Me contacter
         </BaseButton>
+        <!-- Rappel : placez public/cv.pdf avant de déployer -->
+        <a
+          :href="cvPath"
+          download="CV-Maxime.pdf"
+          class="inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white px-7 py-3.5 text-base"
+        >
+          <Download :size="18" />
+          Mon CV
+        </a>
       </div>
     </div>
 

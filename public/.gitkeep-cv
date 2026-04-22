@@ -1,0 +1,2 @@
+Placez votre fichier cv.pdf dans ce dossier (public/cv.pdf) avant de déployer.
+Le bouton "Télécharger mon CV" dans HeroSection et ContactSection pointe vers /cv.pdf.

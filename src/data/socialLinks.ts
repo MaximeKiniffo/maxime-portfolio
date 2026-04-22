@@ -1,23 +1,35 @@
 export interface SocialLink {
-  label: string
-  href: string
-  icon: 'github' | 'linkedin' | 'mail'
+  id: string
+  name: string
+  url: string
+  icon: string
+  color: string
+  displayText: string
 }
 
 export const socialLinks: SocialLink[] = [
   {
-    label: 'GitHub',
-    href: 'https://github.com/votre-username',
+    id: 'github',
+    name: 'GitHub',
+    url: 'https://github.com/votre-username',
     icon: 'github',
+    color: 'hover:text-gray-900 dark:hover:text-white',
+    displayText: 'Mon GitHub',
   },
   {
-    label: 'LinkedIn',
-    href: 'https://linkedin.com/in/votre-profil',
+    id: 'linkedin',
+    name: 'LinkedIn',
+    url: 'https://linkedin.com/in/votre-profil',
     icon: 'linkedin',
+    color: 'hover:text-blue-600',
+    displayText: 'Mon profil LinkedIn',
   },
   {
-    label: 'Email',
-    href: 'mailto:votre@email.fr',
+    id: 'email',
+    name: 'Email',
+    url: 'mailto:contact@exemple.com',
     icon: 'mail',
+    color: 'hover:text-red-500',
+    displayText: 'contact@exemple.com',
   },
 ]
