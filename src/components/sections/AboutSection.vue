@@ -70,7 +70,7 @@ onUnmounted(() => {
             <div class="photo-inner bg-white dark:bg-slate-900">
               <img
                 src="https://api.dicebear.com/7.x/initials/svg?seed=MK&backgroundColor=6366f1&textColor=ffffff&fontSize=38"
-                alt="Photo de profil"
+                alt="Photo de profil de Maxime"
                 class="w-full h-full object-cover"
                 width="200"
                 height="200"
@@ -83,47 +83,47 @@ onUnmounted(() => {
         <!-- Contenu texte -->
         <div class="space-y-5">
           <p class="text-lg font-semibold text-slate-800 dark:text-white leading-relaxed">
-            Développeur web fullstack en alternance, je conçois et déploie des applications
-            de A à Z — avec une attention particulière portée à la qualité du code,
-            la performance et l'expérience utilisateur.
+            Développeur web fullstack en alternance, je conçois et déploie des applications de A à
+            Z — avec une attention particulière portée à la qualité du code, la performance et
+            l'expérience utilisateur.
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
             Mon quotidien tourne autour de
             <span class="keyword">Vue.js</span>,
             <span class="keyword">TypeScript</span> et
-            <span class="keyword">Node.js</span>.
-            J'aime construire des interfaces fluides et des APIs robustes, en gardant toujours
-            le cap sur le besoin métier réel derrière chaque fonctionnalité.
+            <span class="keyword">Node.js</span>. J'aime construire des interfaces fluides et des
+            APIs robustes, en gardant toujours le cap sur le besoin métier réel derrière chaque
+            fonctionnalité.
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Formé en alternance, j'ai eu la chance de travailler sur des projets concrets dès
-            le début de ma formation — ce qui m'a appris à collaborer avec des équipes techniques
+            Formé en alternance, j'ai eu la chance de travailler sur des projets concrets dès le
+            début de ma formation — ce qui m'a appris à collaborer avec des équipes techniques
             comme non-techniques, à itérer rapidement et à livrer du code fiable. Je m'appuie sur
             <span class="keyword">NestJS</span> pour les backends structurés et j'explore
             activement les bonnes pratiques autour de l'architecture et de la scalabilité.
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Curieux par nature, je m'intéresse à l'architecture logicielle, aux design systems
-            et à la performance web. Je suis activement à la recherche d'une alternance ou
+            Curieux par nature, je m'intéresse à l'architecture logicielle, aux design systems et à
+            la performance web. Je suis activement à la recherche d'une alternance ou
             d'opportunités où je pourrai progresser sur des projets stimulants et impactants.
           </p>
 
           <!-- Stats animées -->
-          <div ref="statsEl" class="grid grid-cols-3 gap-3 pt-4">
+          <div ref="statsEl" class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
             <div
               v-for="(stat, index) in stats"
               :key="stat.label"
-              class="flex flex-col items-center text-center p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+              class="flex flex-row sm:flex-col items-center text-left sm:text-center gap-3 sm:gap-0 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
             >
               <span
                 class="text-2xl sm:text-3xl font-bold text-primary-600 dark:text-primary-400 tabular-nums leading-none"
               >
                 {{ counts[index] }}{{ stat.suffix }}
               </span>
-              <span class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-tight">
+              <span class="text-xs text-slate-500 dark:text-slate-400 sm:mt-1.5 leading-tight">
                 {{ stat.label }}
               </span>
             </div>
@@ -137,9 +137,16 @@ onUnmounted(() => {
 <style scoped>
 .photo-wrapper {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .photo-wrapper {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 .photo-ring {
@@ -186,7 +193,6 @@ onUnmounted(() => {
   border-radius: 0.3rem;
 }
 
-/* Dark mode via CSS custom property on :root when .dark is applied */
 :global(html.dark) .keyword {
   color: #a5b4fc;
   background-color: rgba(99, 102, 241, 0.15);

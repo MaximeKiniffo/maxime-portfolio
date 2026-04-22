@@ -71,7 +71,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="cardEl"
-    class="skill-card flex flex-col gap-3 p-5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-lg transition-[border-color,box-shadow] duration-300"
+    class="skill-card flex flex-col gap-3 p-5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary-200 dark:hover:border-primary-800/50 hover:shadow-lg transition-[border-color,box-shadow,transform] duration-300"
   >
     <!-- Icon + Name row -->
     <div class="flex items-center gap-3">
@@ -117,7 +117,7 @@ onUnmounted(() => {
 }
 
 .skill-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px) rotate(0.5deg);
 }
 
 @media (prefers-reduced-motion: reduce) {

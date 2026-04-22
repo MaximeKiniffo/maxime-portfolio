@@ -1,69 +1,66 @@
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from 'vue'
-  import { Github, Linkedin, Mail, Send, Download, Loader2 } from 'lucide-vue-next'
-  import SectionTitle from '@/components/ui/SectionTitle.vue'
-  import BaseButton from '@/components/ui/BaseButton.vue'
-  import { socialLinks } from '@/data/socialLinks'
-  import { useContactForm } from '@/composables/useContactForm'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { Github, Linkedin, Mail, Send, Download, Loader2 } from 'lucide-vue-next'
+import SectionTitle from '@/components/ui/SectionTitle.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import { socialLinks } from '@/data/socialLinks'
+import { useContactForm } from '@/composables/useContactForm'
 
-  const cvPath = import.meta.env.BASE_URL + 'cv.pdf'
+const cvPath = import.meta.env.BASE_URL + 'cv.pdf'
 
-  const iconMap: Record<string, object> = { github: Github, linkedin: Linkedin, mail: Mail }
+const iconMap: Record<string, object> = { github: Github, linkedin: Linkedin, mail: Mail }
 
-  const { form, errors, isSubmitting, isSuccess, isError, submit } = useContactForm()
+const { form, errors, isSubmitting, isSuccess, isError, submit } = useContactForm()
 
-  const containerEl = ref<HTMLElement | null>(null)
-  const leftEl = ref<HTMLElement | null>(null)
-  const rightEl = ref<HTMLElement | null>(null)
-  let observer: IntersectionObserver | null = null
+const containerEl = ref<HTMLElement | null>(null)
+const leftEl = ref<HTMLElement | null>(null)
+const rightEl = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
 
-  onMounted(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return
+onMounted(() => {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (prefersReduced) return
 
-    leftEl.value?.classList.add('opacity-0')
-    rightEl.value?.classList.add('opacity-0')
+  leftEl.value?.classList.add('opacity-0')
+  rightEl.value?.classList.add('opacity-0')
 
-    observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          leftEl.value?.classList.add('animate-fade-in-up')
-          leftEl.value?.classList.remove('opacity-0')
-          setTimeout(() => {
-            rightEl.value?.classList.add('animate-fade-in-up')
-            rightEl.value?.classList.remove('opacity-0')
-          }, 150)
-          observer?.disconnect()
-        }
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
-    )
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        leftEl.value?.classList.add('animate-fade-in-up')
+        leftEl.value?.classList.remove('opacity-0')
+        setTimeout(() => {
+          rightEl.value?.classList.add('animate-fade-in-up')
+          rightEl.value?.classList.remove('opacity-0')
+        }, 150)
+        observer?.disconnect()
+      }
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -60px 0px' },
+  )
 
-    containerEl.value && observer.observe(containerEl.value)
-  })
+  containerEl.value && observer.observe(containerEl.value)
+})
 
-  onUnmounted(() => {
-    observer?.disconnect()
-  })
+onUnmounted(() => {
+  observer?.disconnect()
+})
 </script>
 
 <template>
   <section id="contact" class="section-padding bg-slate-50 dark:bg-slate-800/30">
     <div ref="containerEl" class="container-max">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-
+      <div class="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
         <!-- ── Left column ── -->
         <div ref="leftEl">
-          <SectionTitle align="left">
-            Me contacter
-          </SectionTitle>
+          <SectionTitle align="left">Me contacter</SectionTitle>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-8 -mt-6">
-            Vous avez un projet, une opportunité ou simplement envie d'échanger ?
-            N'hésitez pas à me contacter !
+            Vous avez un projet, une opportunité ou simplement envie d'échanger ? N'hésitez pas à
+            me contacter !
           </p>
 
-          <!-- Contact cards -->
+          <!-- Contact cards avec border-left au hover -->
           <div class="space-y-3 mb-8">
             <a
               v-for="link in socialLinks"
@@ -71,7 +68,7 @@
               :href="link.url"
               :target="link.url.startsWith('mailto:') ? undefined : '_blank'"
               :rel="link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'"
-              class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-md hover:scale-[1.02] transition-all duration-200 group"
+              class="contact-card flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-md hover:scale-[1.01] transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
             >
               <span
                 class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 group-hover:bg-primary-50 dark:group-hover:bg-primary-950 transition-colors flex-shrink-0"
@@ -83,7 +80,9 @@
                 />
               </span>
               <div>
-                <p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wide">
+                <p
+                  class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wide"
+                >
                   {{ link.name }}
                 </p>
                 <p class="font-semibold text-sm text-slate-800 dark:text-slate-200 mt-0.5">
@@ -93,11 +92,11 @@
             </a>
           </div>
 
-          <!-- CV download — placez public/cv.pdf avant de déployer -->
+          <!-- CV download -->
           <a
             :href="cvPath"
             download="CV-Maxime.pdf"
-            class="inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 border-2 border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-primary-500 dark:hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950 px-5 py-2.5 text-sm"
+            class="inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-2 border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-primary-500 dark:hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950 px-5 py-2.5 text-sm"
           >
             <Download :size="16" />
             Télécharger mon CV
@@ -106,7 +105,6 @@
 
         <!-- ── Right column: form ── -->
         <div ref="rightEl">
-
           <!-- Success state -->
           <div
             v-if="isSuccess"
@@ -130,7 +128,6 @@
             class="space-y-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm"
             @submit.prevent="submit"
           >
-
             <!-- Error banner -->
             <div
               v-if="isError"
@@ -157,10 +154,8 @@
                 placeholder="Jean Dupont"
                 :aria-describedby="errors.name ? 'error-name' : undefined"
                 :aria-invalid="!!errors.name || undefined"
-                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
-                :class="errors.name
-                  ? 'border-red-400 dark:border-red-600'
-                  : 'border-slate-200 dark:border-slate-700'"
+                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                :class="errors.name ? 'border-red-400 dark:border-red-600' : 'border-slate-200 dark:border-slate-600'"
               />
               <p
                 v-if="errors.name"
@@ -188,10 +183,8 @@
                 placeholder="jean@exemple.fr"
                 :aria-describedby="errors.email ? 'error-email' : undefined"
                 :aria-invalid="!!errors.email || undefined"
-                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
-                :class="errors.email
-                  ? 'border-red-400 dark:border-red-600'
-                  : 'border-slate-200 dark:border-slate-700'"
+                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                :class="errors.email ? 'border-red-400 dark:border-red-600' : 'border-slate-200 dark:border-slate-600'"
               />
               <p
                 v-if="errors.email"
@@ -203,7 +196,7 @@
               </p>
             </div>
 
-            <!-- Sujet (optionnel) -->
+            <!-- Sujet -->
             <div>
               <label
                 for="contact-subject"
@@ -217,7 +210,7 @@
                 v-model="form.subject"
                 type="text"
                 placeholder="Proposition de mission, question..."
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
               />
             </div>
 
@@ -236,10 +229,8 @@
                 placeholder="Bonjour Maxime, j'aimerais vous proposer..."
                 :aria-describedby="errors.message ? 'error-message' : undefined"
                 :aria-invalid="!!errors.message || undefined"
-                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-900 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
-                :class="errors.message
-                  ? 'border-red-400 dark:border-red-600'
-                  : 'border-slate-200 dark:border-slate-700'"
+                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
+                :class="errors.message ? 'border-red-400 dark:border-red-600' : 'border-slate-200 dark:border-slate-600'"
               />
               <p
                 v-if="errors.message"
@@ -264,8 +255,23 @@
             </BaseButton>
           </form>
         </div>
-
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+/* Border-left accent apparaît en couleur primaire au hover */
+.contact-card {
+  border-left-width: 3px;
+  border-left-color: transparent;
+}
+
+.contact-card:hover {
+  border-left-color: #6366f1;
+}
+
+:global(html.dark) .contact-card:hover {
+  border-left-color: #818cf8;
+}
+</style>

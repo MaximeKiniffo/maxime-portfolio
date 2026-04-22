@@ -5,10 +5,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
   }
 
   body {
-    @apply bg-white text-slate-900 font-sans antialiased transition-colors duration-300;
+    @apply bg-white text-slate-900 font-sans antialiased;
+    transition: background-color 300ms ease, color 300ms ease;
   }
 
   .dark body {
@@ -19,6 +21,17 @@
   *::before,
   *::after {
     box-sizing: border-box;
+  }
+
+  /* Global focus-visible ring */
+  :focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
   }
 }
 
@@ -52,5 +65,13 @@
 
   .opacity-0-init {
     opacity: 0;
+  }
+}
+
+/* Hide native cursor on desktop when custom cursor is active */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
   }
 }
