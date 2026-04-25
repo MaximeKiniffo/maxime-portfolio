@@ -1,46 +1,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, markRaw, type Component } from 'vue'
-import { Code, Palette, Globe, GitBranch, Code2, Database } from 'lucide-vue-next'
+import { Icon } from '@iconify/vue'
 import type { Skill } from '@/data/skills'
-import IconVue from '@/components/icons/IconVue.vue'
-import IconTypeScript from '@/components/icons/IconTypeScript.vue'
-import IconNodejs from '@/components/icons/IconNodejs.vue'
-import IconNestjs from '@/components/icons/IconNestjs.vue'
-import IconJavaScript from '@/components/icons/IconJavaScript.vue'
-import IconSymfony from '@/components/icons/IconSymfony.vue'
+import IconWindsurf from '@/components/icons/IconWindsurf.vue'
 
 const props = defineProps<{ skill: Skill }>()
 
 const cardEl = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
 
-const lucideMap: Record<string, Component> = {
-  code: markRaw(Code),
-  palette: markRaw(Palette),
-  globe: markRaw(Globe),
-  'git-branch': markRaw(GitBranch),
-  'code-2': markRaw(Code2),
-  database: markRaw(Database),
-  container: markRaw(Database), // fallback to Database if Container isn't available
-}
-
-const customMap: Record<string, Component> = {
-  vue: markRaw(IconVue),
-  typescript: markRaw(IconTypeScript),
-  nodejs: markRaw(IconNodejs),
-  nestjs: markRaw(IconNestjs),
-  javascript: markRaw(IconJavaScript),
-  symfony: markRaw(IconSymfony),
-}
-
-const iconComponent = computed((): Component => {
-  if (props.skill.icon === 'custom') {
-    return customMap[props.skill.id] ?? markRaw(Code)
-  }
-  return lucideMap[props.skill.icon] ?? markRaw(Code)
-})
+const isCustom = computed(() => props.skill.icon === 'custom')
 
 const levelLabel = computed(() => {
+  if (props.skill.level === 0) return 'Notions'
   if (props.skill.level >= 80) return 'Expert'
   if (props.skill.level >= 60) return 'Avancé'
   if (props.skill.level >= 35) return 'Intermédiaire'
@@ -76,9 +48,10 @@ onUnmounted(() => {
     <!-- Icon + Name row -->
     <div class="flex items-center gap-3">
       <div
-        class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 shrink-0"
+        class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-50 dark:bg-slate-700/60 shrink-0"
       >
-        <component :is="iconComponent" :size="20" width="20" height="20" />
+        <IconWindsurf v-if="isCustom" class="w-6 h-6" />
+        <Icon v-else :icon="skill.icon" width="24" height="24" />
       </div>
       <div class="min-w-0">
         <h3 class="font-semibold text-slate-800 dark:text-white text-sm leading-tight truncate">

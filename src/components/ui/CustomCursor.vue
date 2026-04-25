@@ -41,9 +41,19 @@ function onOver(e: MouseEvent) {
   )
 }
 
+function onLeave() {
+  isVisible.value = false
+}
+
+function onEnter() {
+  isVisible.value = true
+}
+
 onMounted(() => {
   window.addEventListener('mousemove', onMove, { passive: true })
   document.addEventListener('mouseover', onOver, { passive: true })
+  document.addEventListener('mouseleave', onLeave)
+  document.addEventListener('mouseenter', onEnter)
   raf = requestAnimationFrame(loop)
   document.documentElement.classList.add('has-custom-cursor')
 })
@@ -51,6 +61,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('mousemove', onMove)
   document.removeEventListener('mouseover', onOver)
+  document.removeEventListener('mouseleave', onLeave)
+  document.removeEventListener('mouseenter', onEnter)
   if (raf !== null) cancelAnimationFrame(raf)
   document.documentElement.classList.remove('has-custom-cursor')
 })
