@@ -11,7 +11,7 @@ const statsEl = ref<HTMLElement | null>(null)
 const stats = [
   { label: 'Projets réalisés', value: 12, suffix: '+' },
   { label: 'Technologies maîtrisées', value: 15, suffix: '+' },
-  { label: 'Année de formation', value: 3, suffix: 'ème' },
+  { label: 'Année de Master', value: 1, suffix: 'ère' },
 ]
 
 const counts = ref([0, 0, 0])
@@ -58,7 +58,7 @@ onUnmounted(() => {
 <template>
   <section id="about" class="section-padding bg-slate-50 dark:bg-slate-800/30">
     <div ref="sectionEl" class="container-max">
-      <SectionTitle subtitle="Quelques mots sur mon parcours et ma vision du métier">
+      <SectionTitle subtitle="Étudiant en Master 1 Développement Full-Stack">
         À propos de moi
       </SectionTitle>
 
@@ -83,32 +83,28 @@ onUnmounted(() => {
         <!-- Contenu texte -->
         <div class="space-y-5">
           <p class="text-lg font-semibold text-slate-800 dark:text-white leading-relaxed">
-            Développeur web fullstack en alternance, je conçois et déploie des applications de A à
-            Z — avec une attention particulière portée à la qualité du code, la performance et
-            l'expérience utilisateur.
+            Je m'appelle Maxime Kiniffo, développeur web full-stack passionné par la création
+            d'applications modernes et l'expérience utilisateur.
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Mon quotidien tourne autour de
+            Je travaille principalement avec
             <span class="keyword">Vue.js</span>,
-            <span class="keyword">TypeScript</span> et
-            <span class="keyword">Node.js</span>. J'aime construire des interfaces fluides et des
-            APIs robustes, en gardant toujours le cap sur le besoin métier réel derrière chaque
-            fonctionnalité.
+            <span class="keyword">React.js</span>,
+            <span class="keyword">JavaScript</span> et
+            <span class="keyword">TypeScript</span>, tout en développant aussi mes compétences en
+            <span class="keyword">PHP</span> et <span class="keyword">Symfony</span>.
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Formé en alternance, j'ai eu la chance de travailler sur des projets concrets dès le
-            début de ma formation — ce qui m'a appris à collaborer avec des équipes techniques
-            comme non-techniques, à itérer rapidement et à livrer du code fiable. Je m'appuie sur
-            <span class="keyword">NestJS</span> pour les backends structurés et j'explore
-            activement les bonnes pratiques autour de l'architecture et de la scalabilité.
+            En ce moment, je me forme également à
+            <span class="keyword">NestJS</span> afin de renforcer ma compréhension du
+            développement back-end moderne.
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Curieux par nature, je m'intéresse à l'architecture logicielle, aux design systems et à
-            la performance web. Je suis activement à la recherche d'une alternance ou
-            d'opportunités où je pourrai progresser sur des projets stimulants et impactants.
+            À travers mes projets, je cherche à créer des applications responsives, claires et
+            maintenables.
           </p>
 
           <!-- Stats animées -->
