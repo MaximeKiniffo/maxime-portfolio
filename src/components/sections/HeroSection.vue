@@ -116,7 +116,7 @@ onUnmounted(() => {
     <!-- Scroll indicator -->
     <button
       @click="scrollTo('about')"
-      class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 dark:text-slate-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors animate-bounce focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-full p-2"
+      class="absolute bottom-10 inset-x-0 mx-auto w-fit flex flex-col items-center gap-2 text-slate-400 dark:text-slate-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors animate-bounce focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-full p-2"
       aria-label="Défiler vers le bas"
     >
       <span class="text-xs font-medium tracking-widest uppercase">Découvrir</span>

@@ -34,7 +34,7 @@ const filteredSkills = computed(() =>
 
       <!-- Filtres par catégorie — tablist pour l'accessibilité -->
       <div
-        class="flex overflow-x-auto gap-2 mb-10 pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:justify-center"
+        class="flex flex-wrap gap-2 mb-10 justify-center"
         role="tablist"
         aria-label="Filtrer les compétences par catégorie"
         id="skills-filter"

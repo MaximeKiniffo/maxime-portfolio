@@ -69,7 +69,7 @@ function techClass(tech: string): string {
 
       <!-- Filtres -->
       <div
-        class="flex overflow-x-auto gap-2 mb-10 pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:justify-center"
+        class="flex flex-wrap gap-2 mb-10 justify-center"
         role="tablist"
         aria-label="Filtrer par type d'expérience"
       >
