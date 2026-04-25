@@ -4,7 +4,7 @@ import { ArrowDown, Sparkles, Download } from 'lucide-vue-next'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useScrollTo } from '@/composables/useScrollTo'
 
-const cvPath = import.meta.env.BASE_URL + 'cv.pdf'
+const cvPath = import.meta.env.BASE_URL + 'Maxime_Kiniffo_CV.pdf'
 const { scrollTo } = useScrollTo()
 
 const FULL_TITLE = 'Développeur Web Full-Stack'

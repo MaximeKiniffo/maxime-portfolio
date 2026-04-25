@@ -6,7 +6,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import { socialLinks } from '@/data/socialLinks'
 import { useContactForm } from '@/composables/useContactForm'
 
-const cvPath = import.meta.env.BASE_URL + 'cv.pdf'
+const cvPath = import.meta.env.BASE_URL + 'Maxime_Kiniffo_CV.pdf'
 
 const iconMap: Record<string, object> = { github: Github, linkedin: Linkedin, mail: Mail }
 
