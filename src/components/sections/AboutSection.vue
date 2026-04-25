@@ -10,7 +10,7 @@ const statsEl = ref<HTMLElement | null>(null)
 
 const stats = [
   { label: 'Projets réalisés', value: 12, suffix: '+' },
-  { label: 'Technologies maîtrisées', value: 15, suffix: '+' },
+  { label: 'Technologies utilisées', value: 15, suffix: '+' },
   { label: 'Année de Master', value: 1, suffix: 'ère' },
 ]
 
@@ -70,7 +70,7 @@ onUnmounted(() => {
             <div class="photo-inner bg-white dark:bg-slate-900">
               <img
                 src="https://api.dicebear.com/7.x/initials/svg?seed=MK&backgroundColor=6366f1&textColor=ffffff&fontSize=38"
-                alt="Photo de profil de Maxime"
+                alt="Photo de profil de Maxime Kiniffo"
                 class="w-full h-full object-cover"
                 width="200"
                 height="200"

@@ -95,7 +95,7 @@ onUnmounted(() => {
           <!-- CV download -->
           <a
             :href="cvPath"
-            download="CV-Maxime.pdf"
+            download="CV-Maxime-Kiniffo.pdf"
             class="inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-2 border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-primary-500 dark:hover:border-primary-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950 px-5 py-2.5 text-sm"
           >
             <Download :size="16" />
@@ -226,7 +226,7 @@ onUnmounted(() => {
                 id="contact-message"
                 v-model="form.message"
                 rows="5"
-                placeholder="Bonjour Maxime, j'aimerais vous proposer..."
+                placeholder="Bonjour Maxime Kiniffo, j'aimerais vous proposer..."
                 :aria-describedby="errors.message ? 'error-message' : undefined"
                 :aria-invalid="!!errors.message || undefined"
                 class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"

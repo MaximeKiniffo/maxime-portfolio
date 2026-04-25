@@ -18,7 +18,7 @@ export const skills: Skill[] = [
 
   // Backend
   { id: 'nodejs', name: 'Node.js', category: 'backend', level: 50, icon: 'logos:nodejs-icon', color: 'bg-green-600' },
-  { id: 'nestjs', name: 'NestJS', category: 'backend', level: 50, icon: 'logos:nestjs', color: 'bg-red-500' },
+  { id: 'nestjs', name: 'NestJS', category: 'backend', level: 30, icon: 'logos:nestjs', color: 'bg-red-500' },
   { id: 'symfony', name: 'Symfony / PHP', category: 'backend', level: 30, icon: 'logos:symfony', color: 'bg-indigo-500' },
   { id: 'api-rest', name: 'API REST', category: 'backend', level: 60, icon: 'carbon:api', color: 'bg-teal-500' },
 

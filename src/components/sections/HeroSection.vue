@@ -71,7 +71,7 @@ onUnmounted(() => {
         style="animation-delay: 100ms; animation-fill-mode: both"
       >
         Bonjour, je suis
-        <span class="shimmer-name">Maxime</span>
+        <span class="shimmer-name">Maxime Kiniffo</span>
       </h1>
 
       <!-- Titre avec effet typing -->
@@ -104,7 +104,7 @@ onUnmounted(() => {
         </BaseButton>
         <a
           :href="cvPath"
-          download="CV-Maxime.pdf"
+          download="CV-Maxime-Kiniffo.pdf"
           class="inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white px-7 py-3.5 text-base"
         >
           <Download :size="18" />

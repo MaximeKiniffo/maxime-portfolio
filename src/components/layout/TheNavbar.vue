@@ -45,7 +45,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
         @click.prevent="navigateTo('#hero')"
         class="text-lg font-bold text-slate-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
       >
-        Maxime<span class="text-primary-500">.</span>
+        Maxime Kiniffo<span class="text-primary-500">.</span>
       </a>
 
       <!-- Desktop navigation -->

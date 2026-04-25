@@ -12,13 +12,8 @@ const currentYear = new Date().getFullYear()
     <div class="container-max px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="text-center sm:text-left">
-          <p class="text-sm text-slate-500 dark:text-slate-400">
-            Fait avec
-            <span class="font-medium text-primary-600 dark:text-primary-400">Vue.js</span>
-            &amp; <span class="text-red-500">❤️</span>
-          </p>
-          <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
-            © {{ currentYear }} — Maxime. Tous droits réservés.
+          <p class="text-xs text-slate-400 dark:text-slate-500">
+            © {{ currentYear }} — Maxime Kiniffo. Tous droits réservés.
           </p>
         </div>
 
