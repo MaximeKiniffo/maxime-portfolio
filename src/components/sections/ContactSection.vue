@@ -242,6 +242,9 @@ onUnmounted(() => {
               </p>
             </div>
 
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
             <!-- Submit -->
             <BaseButton
               type="submit"
