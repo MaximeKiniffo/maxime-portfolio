@@ -32,7 +32,7 @@ export const experiences: Experience[] = [
     title: 'Application web & mobile full-stack',
     type: 'study',
     description:
-      "Projet full-stack réalisé en équipe dans le cadre de la formation. L'application couvre une interface web, une application mobile et une API back-end. J'ai contribué à la conception des écrans, au développement des composants et à l'intégration de l'API.",
+      "C15 Tour est une application de gestion et de suivi GPS pour organiser des convois ou des balades en groupe autour de la Citroën C15. Elle permet à un organisateur de créer un événement, préparer un itinéraire sur carte, ajouter des points d’arrêt, puis partager un code d’accès aux participants. Ces derniers peuvent rejoindre le tour depuis l’application mobile et transmettre leur position en temps réel afin de faciliter le suivi du groupe pendant le trajet.",
     stack: ['React.js', 'React Native', 'NestJS', 'TypeScript'],
   },
   {
