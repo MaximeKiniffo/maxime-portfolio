@@ -33,7 +33,7 @@
         <article
           v-for="(exp, index) in filtered"
           :key="exp.id"
-          :style="{ '--stagger': index } as Record<string, unknown>"
+          :style="{ '--stagger': index }"
           :class="[
             'group relative flex flex-col p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-slate-900',
             hasExperienceTarget(exp)

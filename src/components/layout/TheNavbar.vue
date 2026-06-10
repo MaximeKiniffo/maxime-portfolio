@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, watch, onMounted, onUnmounted } from 'vue'
+import { nextTick, ref, watch, onMounted, onUnmounted, type ComponentPublicInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Menu, X } from 'lucide-vue-next'
 import ThemeToggle from './ThemeToggle.vue'
@@ -7,11 +7,14 @@ import { navItems } from '@/data/navigation'
 import { useScrollTo } from '@/composables/useScrollTo'
 import { useActiveSection } from '@/composables/useActiveSection'
 
+const DESKTOP_MEDIA_QUERY = '(min-width: 768px)'
+
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 const menuButtonEl = ref<HTMLButtonElement | null>(null)
 const firstMobileLinkEl = ref<HTMLAnchorElement | null>(null)
 let previousBodyOverflow = ''
+let desktopMediaQuery: MediaQueryList | null = null
 
 const route = useRoute()
 const router = useRouter()
@@ -60,7 +63,13 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
-function setFirstMobileLink(el: Element | null) {
+function handleDesktopBreakpoint(event: MediaQueryListEvent) {
+  if (event.matches && isMenuOpen.value) {
+    closeMenu()
+  }
+}
+
+function setFirstMobileLink(el: Element | ComponentPublicInstance | null) {
   firstMobileLinkEl.value = el instanceof HTMLAnchorElement ? el : null
 }
 
@@ -79,11 +88,14 @@ watch(isMenuOpen, async (open) => {
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('keydown', handleKeydown)
+  desktopMediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY)
+  desktopMediaQuery.addEventListener('change', handleDesktopBreakpoint)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('keydown', handleKeydown)
+  desktopMediaQuery?.removeEventListener('change', handleDesktopBreakpoint)
   document.body.style.overflow = previousBodyOverflow
 })
 </script>
@@ -171,7 +183,7 @@ onUnmounted(() => {
         <!-- Backdrop -->
         <div
           class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-          @click="closeMenu"
+          @click="closeMenu()"
         />
         <!-- Panel -->
         <div class="relative bg-white dark:bg-slate-900 shadow-xl">
