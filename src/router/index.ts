@@ -10,6 +10,11 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/projets/:id',
+      name: 'project-detail',
+      component: () => import('@/views/ProjectDetailView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('@/views/NotFoundView.vue'),
@@ -17,6 +22,7 @@ const router = createRouter({
   ],
   scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) return savedPosition
+    if (_to.hash) return { el: _to.hash, top: 80, behavior: 'smooth' }
     return { top: 0 }
   },
 })

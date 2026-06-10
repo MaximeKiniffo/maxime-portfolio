@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { Menu, X } from 'lucide-vue-next'
 import ThemeToggle from './ThemeToggle.vue'
 import { navItems } from '@/data/navigation'
@@ -9,6 +10,8 @@ import { useActiveSection } from '@/composables/useActiveSection'
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 
+const route = useRoute()
+const router = useRouter()
 const { scrollTo } = useScrollTo()
 const { activeSection } = useActiveSection()
 
@@ -19,8 +22,13 @@ function handleScroll() {
   }
 }
 
-function navigateTo(href: string) {
+async function navigateTo(href: string) {
   isMenuOpen.value = false
+  if (route.name !== 'home') {
+    await router.push({ name: 'home', hash: href })
+    return
+  }
+
   scrollTo(href.replace('#', ''))
 }
 

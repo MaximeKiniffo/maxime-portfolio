@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import { ArrowRight, ExternalLink } from 'lucide-vue-next'
 import SectionTitle from '@/components/ui/SectionTitle.vue'
 import { useSingleScrollAnimation } from '@/composables/useScrollAnimation'
-import { experiences } from '@/data/experiences'
+import { experiences, type Experience } from '@/data/experiences'
+import { techClass } from '@/data/techStyles'
 
 type Filter = 'all' | 'pro' | 'study'
 
@@ -35,28 +38,12 @@ const typeLabel: Record<string, string> = {
   study: "Projet d'étude",
 }
 
-const techColor: Record<string, string> = {
-  'Vue.js':         'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-  'TypeScript':     'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  'PHP':            'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
-  'Symfony':        'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
-  'API Platform':   'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
-  'MariaDB':        'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',
-  'Docker':         'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400',
-  'Git':            'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  'Joomla':         'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-  'HTML':           'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  'CSS':            'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  'JavaScript':     'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-500',
-  'React Native':   'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',
-  'React.js':       'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',
-  'NestJS':         'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-  'Expo':           'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
-  'JSON':           'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
+function hasExperienceTarget(exp: Experience): boolean {
+  return Boolean(exp.websiteUrl || exp.projectPage)
 }
 
-function techClass(tech: string): string {
-  return techColor[tech] ?? 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+function projectRoute(exp: Experience) {
+  return { name: 'project-detail', params: { id: exp.id } }
 }
 </script>
 
@@ -100,8 +87,32 @@ function techClass(tech: string): string {
           v-for="(exp, index) in filtered"
           :key="exp.id"
           :style="{ '--stagger': index } as Record<string, unknown>"
-          class="flex flex-col p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-300"
+          :class="[
+            'group relative flex flex-col p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-slate-900',
+            hasExperienceTarget(exp)
+              ? 'cursor-pointer hover:-translate-y-1 hover:shadow-lg hover:border-primary-200 dark:hover:border-primary-700'
+              : 'hover:shadow-md',
+          ]"
         >
+          <a
+            v-if="exp.websiteUrl"
+            :href="exp.websiteUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="absolute inset-0 z-10 rounded-2xl"
+            :aria-label="`Visiter le site de ${exp.company}`"
+          >
+            <span class="sr-only">Visiter le site de {{ exp.company }}</span>
+          </a>
+          <RouterLink
+            v-else-if="exp.projectPage"
+            :to="projectRoute(exp)"
+            class="absolute inset-0 z-10 rounded-2xl"
+            :aria-label="`Voir la présentation du projet ${exp.company}`"
+          >
+            <span class="sr-only">Voir la présentation du projet {{ exp.company }}</span>
+          </RouterLink>
+
           <!-- En-tête -->
           <div class="flex items-center justify-between gap-3 mb-3 flex-wrap">
             <span
@@ -131,6 +142,16 @@ function techClass(tech: string): string {
             >
               {{ tech }}
             </span>
+          </div>
+
+          <div
+            v-if="hasExperienceTarget(exp)"
+            class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 dark:text-primary-400 transition-transform duration-200 group-hover:translate-x-1"
+            aria-hidden="true"
+          >
+            <span>{{ exp.websiteUrl ? 'Visiter le site' : 'Voir le projet' }}</span>
+            <ExternalLink v-if="exp.websiteUrl" :size="16" />
+            <ArrowRight v-else :size="16" />
           </div>
         </article>
       </TransitionGroup>
