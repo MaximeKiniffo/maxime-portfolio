@@ -15,6 +15,7 @@ const techColor: Record<string, string> = {
   'React.js': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',
   NestJS: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
   Expo: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
+  'Expo Router': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400',
   JSON: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
 }
 

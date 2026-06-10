@@ -36,7 +36,7 @@
         rel="noopener noreferrer"
         class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-primary-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-offset-slate-900"
       >
-        Voir le projet hébergé
+        Ouvrir le projet
         <ExternalLink :size="16" />
       </a>
     </div>
