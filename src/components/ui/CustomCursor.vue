@@ -11,6 +11,7 @@ let targetX = 0
 let targetY = 0
 let curX = -100
 let curY = -100
+let isEnabled = false
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t
@@ -35,8 +36,8 @@ function onMove(e: MouseEvent) {
 }
 
 function onOver(e: MouseEvent) {
-  const t = e.target as HTMLElement
-  isHovering.value = !!t.closest(
+  const t = e.target instanceof HTMLElement ? e.target : null
+  isHovering.value = !!t?.closest(
     'a, button, [role="button"], [role="tab"], input, textarea, select, label',
   )
 }
@@ -50,6 +51,11 @@ function onEnter() {
 }
 
 onMounted(() => {
+  const supportsFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  isEnabled = supportsFinePointer && !prefersReducedMotion
+  if (!isEnabled) return
+
   window.addEventListener('mousemove', onMove, { passive: true })
   document.addEventListener('mouseover', onOver, { passive: true })
   document.addEventListener('mouseleave', onLeave)
@@ -59,6 +65,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  if (!isEnabled) return
+
   window.removeEventListener('mousemove', onMove)
   document.removeEventListener('mouseover', onOver)
   document.removeEventListener('mouseleave', onLeave)

@@ -1,21 +1,33 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted, type Component } from 'vue'
 import { Github, Linkedin, Mail, Send, Download, Loader2 } from 'lucide-vue-next'
 import SectionTitle from '@/components/ui/SectionTitle.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { socialLinks } from '@/data/socialLinks'
 import { useContactForm } from '@/composables/useContactForm'
+import { isExternalHref, safeHref } from '@/utils/safeUrl'
 
 const cvPath = import.meta.env.BASE_URL + 'Maxime_Kiniffo_CV.pdf'
 
-const iconMap: Record<string, object> = { github: Github, linkedin: Linkedin, mail: Mail }
+const iconMap: Record<(typeof socialLinks)[number]['icon'], Component> = {
+  github: Github,
+  linkedin: Linkedin,
+  mail: Mail,
+}
 
 const { form, errors, isSubmitting, isSuccess, isError, submit } = useContactForm()
+const safeSocialLinks = computed(() =>
+  socialLinks.flatMap((link) => {
+    const safeUrl = safeHref(link.url)
+    return safeUrl ? [{ ...link, safeUrl }] : []
+  }),
+)
 
 const containerEl = ref<HTMLElement | null>(null)
 const leftEl = ref<HTMLElement | null>(null)
 const rightEl = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | null = null
+let animationTimeout: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -29,9 +41,10 @@ onMounted(() => {
       if (entry.isIntersecting) {
         leftEl.value?.classList.add('animate-fade-in-up')
         leftEl.value?.classList.remove('opacity-0')
-        setTimeout(() => {
+        animationTimeout = setTimeout(() => {
           rightEl.value?.classList.add('animate-fade-in-up')
           rightEl.value?.classList.remove('opacity-0')
+          animationTimeout = null
         }, 150)
         observer?.disconnect()
       }
@@ -44,6 +57,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   observer?.disconnect()
+  if (animationTimeout !== null) clearTimeout(animationTimeout)
 })
 </script>
 
@@ -63,11 +77,11 @@ onUnmounted(() => {
           <!-- Contact cards avec border-left au hover -->
           <div class="space-y-3 mb-8">
             <a
-              v-for="link in socialLinks"
+              v-for="link in safeSocialLinks"
               :key="link.id"
-              :href="link.url"
-              :target="link.url.startsWith('mailto:') ? undefined : '_blank'"
-              :rel="link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'"
+              :href="link.safeUrl"
+              :target="isExternalHref(link.safeUrl) ? '_blank' : undefined"
+              :rel="isExternalHref(link.safeUrl) ? 'noopener noreferrer' : undefined"
               class="contact-card flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-md hover:scale-[1.01] transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
             >
               <span
@@ -210,8 +224,19 @@ onUnmounted(() => {
                 v-model="form.subject"
                 type="text"
                 placeholder="Proposition de mission, question..."
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                class="w-full px-4 py-2.5 rounded-lg border text-sm text-slate-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                :aria-describedby="errors.subject ? 'error-subject' : undefined"
+                :aria-invalid="!!errors.subject || undefined"
+                :class="errors.subject ? 'border-red-400 dark:border-red-600' : 'border-slate-200 dark:border-slate-600'"
               />
+              <p
+                v-if="errors.subject"
+                id="error-subject"
+                role="alert"
+                class="mt-1.5 text-xs text-red-600 dark:text-red-400"
+              >
+                {{ errors.subject }}
+              </p>
             </div>
 
             <!-- Message -->

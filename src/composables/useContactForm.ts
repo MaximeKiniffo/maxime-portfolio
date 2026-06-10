@@ -1,4 +1,4 @@
-import { reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref } from 'vue'
 
 interface ContactForm {
   name: string
@@ -10,11 +10,18 @@ interface ContactForm {
 interface FormErrors {
   name?: string
   email?: string
+  subject?: string
   message?: string
 }
 
 const FORMSPREE_URL = 'https://formspree.io/f/mzdyndkl'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const FIELD_LIMITS = {
+  name: 80,
+  email: 254,
+  subject: 120,
+  message: 2000,
+}
 
 export function useContactForm() {
   const form = reactive<ContactForm>({
@@ -28,32 +35,56 @@ export function useContactForm() {
   const isSubmitting = ref(false)
   const isSuccess = ref(false)
   const isError = ref(false)
+  let successTimeout: ReturnType<typeof setTimeout> | null = null
 
-  function validate(): boolean {
+  function clearErrors() {
     delete errors.name
     delete errors.email
+    delete errors.subject
     delete errors.message
+  }
 
+  function validate(): boolean {
+    clearErrors()
+
+    const name = form.name.trim()
+    const email = form.email.trim()
+    const subject = form.subject.trim()
+    const message = form.message.trim()
     let valid = true
 
-    if (!form.name.trim()) {
+    if (!name) {
       errors.name = 'Le nom est requis.'
+      valid = false
+    } else if (name.length > FIELD_LIMITS.name) {
+      errors.name = `Le nom ne doit pas depasser ${FIELD_LIMITS.name} caracteres.`
       valid = false
     }
 
-    if (!form.email.trim()) {
+    if (!email) {
       errors.email = "L'email est requis."
       valid = false
-    } else if (!EMAIL_REGEX.test(form.email)) {
+    } else if (email.length > FIELD_LIMITS.email) {
+      errors.email = `L'email ne doit pas depasser ${FIELD_LIMITS.email} caracteres.`
+      valid = false
+    } else if (!EMAIL_REGEX.test(email)) {
       errors.email = "L'adresse email n'est pas valide."
       valid = false
     }
 
-    if (!form.message.trim()) {
+    if (subject.length > FIELD_LIMITS.subject) {
+      errors.subject = `Le sujet ne doit pas depasser ${FIELD_LIMITS.subject} caracteres.`
+      valid = false
+    }
+
+    if (!message) {
       errors.message = 'Le message est requis.'
       valid = false
-    } else if (form.message.trim().length < 10) {
-      errors.message = 'Le message doit contenir au moins 10 caractères.'
+    } else if (message.length < 10) {
+      errors.message = 'Le message doit contenir au moins 10 caracteres.'
+      valid = false
+    } else if (message.length > FIELD_LIMITS.message) {
+      errors.message = `Le message ne doit pas depasser ${FIELD_LIMITS.message} caracteres.`
       valid = false
     }
 
@@ -65,13 +96,19 @@ export function useContactForm() {
     form.email = ''
     form.subject = ''
     form.message = ''
-    delete errors.name
-    delete errors.email
-    delete errors.message
+    clearErrors()
   }
 
   async function submit() {
     if (!validate()) return
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      subject: form.subject.trim(),
+      message: form.message.trim(),
+      _gotcha: '',
+    }
 
     isSubmitting.value = true
     isError.value = false
@@ -80,19 +117,16 @@ export function useContactForm() {
       const response = await fetch(FORMSPREE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          subject: form.subject,
-          message: form.message,
-        }),
+        body: JSON.stringify(payload),
       })
 
       if (response.ok) {
         isSuccess.value = true
         resetForm()
-        setTimeout(() => {
+        if (successTimeout !== null) clearTimeout(successTimeout)
+        successTimeout = setTimeout(() => {
           isSuccess.value = false
+          successTimeout = null
         }, 3000)
       } else {
         isError.value = true
@@ -103,6 +137,10 @@ export function useContactForm() {
       isSubmitting.value = false
     }
   }
+
+  onUnmounted(() => {
+    if (successTimeout !== null) clearTimeout(successTimeout)
+  })
 
   return { form, errors, isSubmitting, isSuccess, isError, validate, submit, resetForm }
 }

@@ -7,7 +7,7 @@
     size?: Size
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<Props>(), {
     color: 'primary',
     size: 'md',
   })

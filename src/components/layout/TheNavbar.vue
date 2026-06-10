@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { nextTick, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Menu, X } from 'lucide-vue-next'
 import ThemeToggle from './ThemeToggle.vue'
@@ -9,6 +9,9 @@ import { useActiveSection } from '@/composables/useActiveSection'
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
+const menuButtonEl = ref<HTMLButtonElement | null>(null)
+const firstMobileLinkEl = ref<HTMLAnchorElement | null>(null)
+let previousBodyOverflow = ''
 
 const route = useRoute()
 const router = useRouter()
@@ -18,12 +21,12 @@ const { activeSection } = useActiveSection()
 function handleScroll() {
   isScrolled.value = window.scrollY > 20
   if (isMenuOpen.value && window.scrollY > 80) {
-    isMenuOpen.value = false
+    closeMenu()
   }
 }
 
 async function navigateTo(href: string) {
-  isMenuOpen.value = false
+  closeMenu()
   if (route.name !== 'home') {
     await router.push({ name: 'home', hash: href })
     return
@@ -32,8 +35,57 @@ async function navigateTo(href: string) {
   scrollTo(href.replace('#', ''))
 }
 
-onMounted(() => window.addEventListener('scroll', handleScroll, { passive: true }))
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+function openMenu() {
+  isMenuOpen.value = true
+}
+
+function closeMenu({ restoreFocus = false } = {}) {
+  isMenuOpen.value = false
+  if (restoreFocus) {
+    nextTick(() => menuButtonEl.value?.focus())
+  }
+}
+
+function toggleMenu() {
+  if (isMenuOpen.value) {
+    closeMenu()
+    return
+  }
+  openMenu()
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && isMenuOpen.value) {
+    closeMenu({ restoreFocus: true })
+  }
+}
+
+function setFirstMobileLink(el: Element | null) {
+  firstMobileLinkEl.value = el instanceof HTMLAnchorElement ? el : null
+}
+
+watch(isMenuOpen, async (open) => {
+  if (open) {
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    await nextTick()
+    firstMobileLinkEl.value?.focus()
+    return
+  }
+
+  document.body.style.overflow = previousBodyOverflow
+})
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('keydown', handleKeydown)
+  document.body.style.overflow = previousBodyOverflow
+})
 </script>
 
 <template>
@@ -89,7 +141,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
       <div class="flex items-center gap-2">
         <ThemeToggle />
         <button
-          @click="isMenuOpen = !isMenuOpen"
+          ref="menuButtonEl"
+          @click="toggleMenu"
           class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 relative z-50"
           :aria-label="isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"
           :aria-expanded="isMenuOpen"
@@ -118,15 +171,16 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
         <!-- Backdrop -->
         <div
           class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-          @click="isMenuOpen = false"
+          @click="closeMenu"
         />
         <!-- Panel -->
         <div class="relative bg-white dark:bg-slate-900 shadow-xl">
           <div class="h-16" aria-hidden="true" />
           <ul class="px-4 py-3 flex flex-col gap-1" role="list">
-            <li v-for="item in navItems" :key="item.href">
+            <li v-for="(item, index) in navItems" :key="item.href">
               <a
                 :href="item.href"
+                :ref="index === 0 ? setFirstMobileLink : undefined"
                 @click.prevent="navigateTo(item.href)"
                 :aria-current="activeSection === item.href.replace('#', '') ? 'page' : undefined"
                 :class="[

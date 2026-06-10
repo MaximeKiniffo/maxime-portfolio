@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { computed } from 'vue'
+  import { safeHref } from '@/utils/safeUrl'
+
   type Variant = 'primary' | 'outline' | 'ghost'
   type Size = 'sm' | 'md' | 'lg'
 
@@ -16,6 +19,8 @@
     disabled: false,
     type: 'button',
   })
+
+  const safeButtonHref = computed(() => safeHref(props.href))
 
   const variantClasses: Record<Variant, string> = {
     primary:
@@ -35,8 +40,8 @@
 
 <template>
   <a
-    v-if="href"
-    :href="href"
+    v-if="safeButtonHref"
+    :href="safeButtonHref"
     :class="[
       'inline-flex items-center gap-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900',
       variantClasses[variant ?? 'primary'],
