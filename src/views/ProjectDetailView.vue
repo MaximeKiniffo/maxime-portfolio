@@ -13,7 +13,10 @@
         <div class="space-y-8">
           <div>
             <span
-              class="inline-flex mb-4 text-xs font-semibold px-3 py-1 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400"
+              :class="[
+                'inline-flex mb-4 text-xs font-semibold px-3 py-1 rounded-full',
+                projectTypeBadgeClass,
+              ]"
             >
               {{ projectTypeLabel }}
             </span>
@@ -62,7 +65,7 @@
   import ProjectHighlights from '@/components/projects/ProjectHighlights.vue'
   import ProjectInfoAside from '@/components/projects/ProjectInfoAside.vue'
   import BaseButton from '@/components/ui/BaseButton.vue'
-  import { experiences } from '@/data/experiences'
+  import { experiences, type Experience } from '@/data/experiences'
 
   const route = useRoute()
   const router = useRouter()
@@ -78,10 +81,33 @@
 
   const projectImages = computed(() => project.value?.projectImages ?? [])
 
+  const projectTypeMeta: Record<Experience['type'], { label: string; className: string }> = {
+    alternance: {
+      label: 'Alternance',
+      className: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400',
+    },
+    stage: {
+      label: 'Stage',
+      className: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
+    },
+    study: {
+      label: "Projet d'étude",
+      className: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
+    },
+    personal: {
+      label: 'Projet perso',
+      className: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+    },
+  }
+
   const projectTypeLabel = computed(() => {
     if (!project.value) return ''
-    if (project.value.type === 'study') return "Projet d'étude"
-    return 'Projet'
+    return projectTypeMeta[project.value.type].label
+  })
+
+  const projectTypeBadgeClass = computed(() => {
+    if (!project.value) return ''
+    return projectTypeMeta[project.value.type].className
   })
 
   function goToExperienceSection() {

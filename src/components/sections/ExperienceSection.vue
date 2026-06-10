@@ -1,7 +1,7 @@
 <template>
   <section id="experience" class="section-padding bg-slate-50 dark:bg-slate-800/30">
     <div ref="sectionEl" class="container-max">
-      <SectionTitle subtitle="Mes expériences professionnelles et projets réalisés en formation">
+      <SectionTitle subtitle="Mes expériences professionnelles, projets d'étude et projets personnels">
         Parcours
       </SectionTitle>
 
@@ -9,7 +9,7 @@
       <div
         class="flex flex-wrap gap-2 mb-10 justify-center"
         role="tablist"
-        aria-label="Filtrer par type d'expérience"
+        aria-label="Filtrer le parcours"
       >
         <button
           v-for="f in filters"
@@ -114,7 +114,7 @@
   import { techClass } from '@/data/techStyles'
   import { safeExternalHref } from '@/utils/safeUrl'
 
-  type Filter = 'all' | 'pro' | 'study'
+  type Filter = 'all' | 'pro' | 'study' | 'personal'
 
   const sectionEl = ref<HTMLElement | null>(null)
   useSingleScrollAnimation(sectionEl)
@@ -125,13 +125,18 @@
     { key: 'all', label: 'Tout' },
     { key: 'pro', label: 'Expériences pro' },
     { key: 'study', label: "Projets d'étude" },
+    { key: 'personal', label: 'Projets perso' },
   ]
 
   const filtered = computed(() => {
     if (activeFilter.value === 'pro')
-      return experiences.filter((experience) => experience.type !== 'study')
+      return experiences.filter((experience) =>
+        ['alternance', 'stage'].includes(experience.type)
+      )
     if (activeFilter.value === 'study')
       return experiences.filter((experience) => experience.type === 'study')
+    if (activeFilter.value === 'personal')
+      return experiences.filter((experience) => experience.type === 'personal')
     return experiences
   })
 
@@ -139,12 +144,14 @@
     alternance: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400',
     stage: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
     study: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
+    personal: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
   }
 
   const typeLabel: Record<Experience['type'], string> = {
     alternance: 'Alternance',
     stage: 'Stage',
     study: "Projet d'étude",
+    personal: 'Projet perso',
   }
 
   function hasExperienceTarget(experience: Experience): boolean {
