@@ -1,52 +1,3 @@
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-import { RouterLink } from 'vue-router'
-import { ArrowRight, ExternalLink } from 'lucide-vue-next'
-import SectionTitle from '@/components/ui/SectionTitle.vue'
-import { useSingleScrollAnimation } from '@/composables/useScrollAnimation'
-import { experiences, type Experience } from '@/data/experiences'
-import { techClass } from '@/data/techStyles'
-
-type Filter = 'all' | 'pro' | 'study'
-
-const sectionEl = ref<HTMLElement | null>(null)
-useSingleScrollAnimation(sectionEl)
-
-const activeFilter = ref<Filter>('all')
-
-const filters: { key: Filter; label: string }[] = [
-  { key: 'all', label: 'Tout' },
-  { key: 'pro', label: 'Expériences pro' },
-  { key: 'study', label: "Projets d'étude" },
-]
-
-const filtered = computed(() => {
-  if (activeFilter.value === 'pro') return experiences.filter((e) => e.type !== 'study')
-  if (activeFilter.value === 'study') return experiences.filter((e) => e.type === 'study')
-  return experiences
-})
-
-const badgeClass: Record<string, string> = {
-  alternance: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400',
-  stage: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
-  study: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
-}
-
-const typeLabel: Record<string, string> = {
-  alternance: 'Alternance',
-  stage: 'Stage',
-  study: "Projet d'étude",
-}
-
-function hasExperienceTarget(exp: Experience): boolean {
-  return Boolean(exp.websiteUrl || exp.projectPage)
-}
-
-function projectRoute(exp: Experience) {
-  return { name: 'project-detail', params: { id: exp.id } }
-}
-</script>
-
 <template>
   <section id="experience" class="section-padding bg-slate-50 dark:bg-slate-800/30">
     <div ref="sectionEl" class="container-max">
@@ -78,11 +29,7 @@ function projectRoute(exp: Experience) {
       </div>
 
       <!-- Cartes -->
-      <TransitionGroup
-        name="exp"
-        tag="div"
-        class="grid md:grid-cols-2 gap-6"
-      >
+      <TransitionGroup name="exp" tag="div" class="grid md:grid-cols-2 gap-6">
         <article
           v-for="(exp, index) in filtered"
           :key="exp.id"
@@ -115,9 +62,7 @@ function projectRoute(exp: Experience) {
 
           <!-- En-tête -->
           <div class="flex items-center justify-between gap-3 mb-3 flex-wrap">
-            <span
-              :class="['text-xs font-semibold px-3 py-1 rounded-full', badgeClass[exp.type]]"
-            >
+            <span :class="['text-xs font-semibold px-3 py-1 rounded-full', badgeClass[exp.type]]">
               {{ typeLabel[exp.type] }}
             </span>
             <span class="text-sm font-bold text-slate-700 dark:text-slate-200">
@@ -159,47 +104,98 @@ function projectRoute(exp: Experience) {
   </section>
 </template>
 
+<script setup lang="ts">
+  import { computed, ref } from 'vue'
+  import { RouterLink } from 'vue-router'
+  import { ArrowRight, ExternalLink } from 'lucide-vue-next'
+  import SectionTitle from '@/components/ui/SectionTitle.vue'
+  import { useSingleScrollAnimation } from '@/composables/useScrollAnimation'
+  import { experiences, type Experience } from '@/data/experiences'
+  import { techClass } from '@/data/techStyles'
+
+  type Filter = 'all' | 'pro' | 'study'
+
+  const sectionEl = ref<HTMLElement | null>(null)
+  useSingleScrollAnimation(sectionEl)
+
+  const activeFilter = ref<Filter>('all')
+
+  const filters: { key: Filter; label: string }[] = [
+    { key: 'all', label: 'Tout' },
+    { key: 'pro', label: 'Expériences pro' },
+    { key: 'study', label: "Projets d'étude" },
+  ]
+
+  const filtered = computed(() => {
+    if (activeFilter.value === 'pro')
+      return experiences.filter((experience) => experience.type !== 'study')
+    if (activeFilter.value === 'study')
+      return experiences.filter((experience) => experience.type === 'study')
+    return experiences
+  })
+
+  const badgeClass: Record<Experience['type'], string> = {
+    alternance: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400',
+    stage: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
+    study: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
+  }
+
+  const typeLabel: Record<Experience['type'], string> = {
+    alternance: 'Alternance',
+    stage: 'Stage',
+    study: "Projet d'étude",
+  }
+
+  function hasExperienceTarget(experience: Experience): boolean {
+    return Boolean(experience.websiteUrl || experience.projectPage)
+  }
+
+  function projectRoute(experience: Experience) {
+    return { name: 'project-detail', params: { id: experience.id } }
+  }
+</script>
+
 <style scoped>
-.exp-enter-active {
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
-  transition-delay: calc(var(--stagger, 0) * 60ms);
-}
-
-.exp-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-  position: absolute;
-}
-
-.exp-enter-from {
-  opacity: 0;
-  transform: scale(0.95) translateY(12px);
-}
-
-.exp-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.exp-move {
-  transition: transform 0.4s ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .exp-enter-active,
-  .exp-leave-active,
-  .exp-move {
-    transition: none;
-    transition-delay: 0ms;
+  .exp-enter-active {
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
+    transition-delay: calc(var(--stagger, 0) * 60ms);
   }
 
-  .exp-enter-from,
+  .exp-leave-active {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+    position: absolute;
+  }
+
+  .exp-enter-from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+
   .exp-leave-to {
-    opacity: 1;
-    transform: none;
+    opacity: 0;
+    transform: scale(0.95);
   }
-}
+
+  .exp-move {
+    transition: transform 0.4s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exp-enter-active,
+    .exp-leave-active,
+    .exp-move {
+      transition: none;
+      transition-delay: 0ms;
+    }
+
+    .exp-enter-from,
+    .exp-leave-to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 </style>
