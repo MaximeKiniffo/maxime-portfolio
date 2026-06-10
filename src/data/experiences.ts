@@ -1,3 +1,9 @@
+export interface ProjectImage {
+  src: string
+  alt: string
+  caption?: string
+}
+
 export interface Experience {
   id: string
   company: string
@@ -9,6 +15,7 @@ export interface Experience {
   projectPage?: boolean
   projectUrl?: string
   projectHighlights?: string[]
+  projectImages?: ProjectImage[]
 }
 
 export const experiences: Experience[] = [
