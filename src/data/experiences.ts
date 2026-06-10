@@ -8,7 +8,7 @@ export interface Experience {
   id: string
   company: string
   title: string
-  type: 'alternance' | 'stage' | 'study'
+  type: 'alternance' | 'stage' | 'study' | 'personal'
   description: string
   stack: string[]
   websiteUrl?: string
@@ -83,6 +83,22 @@ export const experiences: Experience[] = [
       "Création d'une nouvelle expérience Sudoku à partir de zéro",
       'Travail UI/UX sur une interface épurée, lisible et accessible',
       "Construction d'une application mobile multiplateforme avec Expo, React Native, TypeScript et Expo Router",
+    ],
+  },
+  {
+    id: 'pokedex',
+    company: 'Pokédex',
+    title: 'Application web React',
+    type: 'personal',
+    description:
+      "Pokédex web développé sous forme de SPA React. L'application affiche une liste de Pokémon, permet de chercher et filtrer par génération ou par type, puis ouvre une fiche détail avec les statistiques, attaques, évolutions, formes et sons. Les données sont récupérées côté client depuis la PokéAPI, sans backend propre au projet.",
+    stack: ['React.js', 'TypeScript', 'Tailwind CSS'],
+    projectPage: true,
+    projectUrl: 'https://pokedex-react-maxime-kiniffo.netlify.app/',
+    projectHighlights: [
+      'Recherche et filtres par génération et par type',
+      'Fiches détail avec statistiques, attaques, évolutions, formes et sons',
+      'Récupération et cache des données PokéAPI côté client avec React Query',
     ],
   },
 ]
