@@ -33,7 +33,7 @@
         <article
           v-for="(exp, index) in filtered"
           :key="exp.id"
-          :style="{ '--stagger': index } as Record<string, unknown>"
+          :style="{ '--stagger': index }"
           :class="[
             'group relative flex flex-col p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-slate-900',
             hasExperienceTarget(exp)
@@ -42,8 +42,8 @@
           ]"
         >
           <a
-            v-if="exp.websiteUrl"
-            :href="exp.websiteUrl"
+            v-if="safeExperienceHref(exp)"
+            :href="safeExperienceHref(exp)"
             target="_blank"
             rel="noopener noreferrer"
             class="absolute inset-0 z-10 rounded-2xl"
@@ -94,8 +94,8 @@
             class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 dark:text-primary-400 transition-transform duration-200 group-hover:translate-x-1"
             aria-hidden="true"
           >
-            <span>{{ exp.websiteUrl ? 'Visiter le site' : 'Voir le projet' }}</span>
-            <ExternalLink v-if="exp.websiteUrl" :size="16" />
+            <span>{{ safeExperienceHref(exp) ? 'Visiter le site' : 'Voir le projet' }}</span>
+            <ExternalLink v-if="safeExperienceHref(exp)" :size="16" />
             <ArrowRight v-else :size="16" />
           </div>
         </article>
@@ -112,6 +112,7 @@
   import { useSingleScrollAnimation } from '@/composables/useScrollAnimation'
   import { experiences, type Experience } from '@/data/experiences'
   import { techClass } from '@/data/techStyles'
+  import { safeExternalHref } from '@/utils/safeUrl'
 
   type Filter = 'all' | 'pro' | 'study'
 
@@ -147,7 +148,11 @@
   }
 
   function hasExperienceTarget(experience: Experience): boolean {
-    return Boolean(experience.websiteUrl || experience.projectPage)
+    return Boolean(safeExperienceHref(experience) || experience.projectPage)
+  }
+
+  function safeExperienceHref(experience: Experience): string | undefined {
+    return safeExternalHref(experience.websiteUrl)
   }
 
   function projectRoute(experience: Experience) {

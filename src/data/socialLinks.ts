@@ -2,7 +2,7 @@ export interface SocialLink {
   id: string
   name: string
   url: string
-  icon: string
+  icon: 'github' | 'linkedin' | 'mail'
   color: string
   displayText: string
 }

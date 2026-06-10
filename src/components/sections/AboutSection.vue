@@ -15,6 +15,7 @@ const stats = [
 ]
 
 const counts = ref([0, 0, 0])
+const rafIds: number[] = []
 
 function animateCount(index: number, target: number, duration = 1600) {
   const startTime = performance.now()
@@ -22,9 +23,11 @@ function animateCount(index: number, target: number, duration = 1600) {
     const progress = Math.min((now - startTime) / duration, 1)
     const eased = 1 - Math.pow(1 - progress, 3)
     counts.value[index] = Math.round(eased * target)
-    if (progress < 1) requestAnimationFrame(step)
+    if (progress < 1) {
+      rafIds.push(requestAnimationFrame(step))
+    }
   }
-  requestAnimationFrame(step)
+  rafIds.push(requestAnimationFrame(step))
 }
 
 let statsObserver: IntersectionObserver | null = null
@@ -52,6 +55,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   statsObserver?.disconnect()
+  rafIds.forEach((id) => cancelAnimationFrame(id))
+  rafIds.length = 0
 })
 </script>
 

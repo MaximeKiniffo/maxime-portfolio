@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, markRaw, type Component } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import type { Skill } from '@/data/skills'
 import IconWindsurf from '@/components/icons/IconWindsurf.vue'

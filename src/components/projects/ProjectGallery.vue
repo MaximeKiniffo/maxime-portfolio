@@ -106,6 +106,7 @@
   }
 
   function selectImage(index: number) {
+    if (index < 0 || index >= props.images.length) return
     activeImageIndex.value = index
   }
 
