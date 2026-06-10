@@ -68,4 +68,21 @@ export const experiences: Experience[] = [
       'Travail sur une expérience claire, accessible et adaptée aux étudiants',
     ],
   },
+  {
+    id: 'sudoku',
+    company: 'Sudoku',
+    title: 'Application mobile de Sudoku',
+    type: 'study',
+    description:
+      "Projet réalisé dans le cadre d'un exercice de UI/UX design autour de la refonte d'une application existante. Plutôt que de simplement modifier l'interface de départ, nous avons choisi de créer une nouvelle application de Sudoku à partir de zéro, avec une vision produit centrée sur une expérience claire, lisible et agréable pour un public large.",
+    stack: ['Expo', 'React Native', 'TypeScript', 'Expo Router'],
+    projectPage: true,
+    projectUrl:
+      'https://expo.dev/accounts/maximekiniffo/projects/sudoku/builds/7802346c-36ec-49ec-ab8d-5e86b4fd2895',
+    projectHighlights: [
+      "Création d'une nouvelle expérience Sudoku à partir de zéro",
+      'Travail UI/UX sur une interface épurée, lisible et accessible',
+      "Construction d'une application mobile multiplateforme avec Expo, React Native, TypeScript et Expo Router",
+    ],
+  },
 ]
